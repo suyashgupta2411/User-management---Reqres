@@ -45,8 +45,11 @@ const UserListPage: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<number | null>(null);
 
   useEffect(() => {
-    dispatch(fetchUsers(current_page));
-  }, [dispatch, current_page]);
+    // Only fetch users if the list is empty (initial load) or page changes
+    if (users.length === 0) {
+      dispatch(fetchUsers(current_page));
+    }
+  }, [dispatch, current_page, users.length]);
 
   const handlePageChange = (page: number) => {
     dispatch(fetchUsers(page));

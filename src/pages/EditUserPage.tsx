@@ -44,7 +44,7 @@ const EditUserPage: React.FC = () => {
     setLoading(true);
 
     try {
-      const result = await dispatch(
+      const resultAction = await dispatch(
         updateUser({
           id: Number(id),
           userData: {
@@ -55,14 +55,14 @@ const EditUserPage: React.FC = () => {
         })
       );
 
-      if (updateUser.fulfilled.match(result)) {
+      if (updateUser.fulfilled.match(resultAction)) {
         toast.success("User details have been successfully updated.");
-        navigate("/users");
+        navigate("/users"); // Rely on Redux state update
       } else {
         toast.error("Unable to update user details.");
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error("An unexpected error occurred.");
     } finally {
       setLoading(false);
