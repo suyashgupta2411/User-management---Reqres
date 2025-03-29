@@ -44,7 +44,7 @@ The application offers a sleek, glass-morphic UI design with full responsiveness
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/user-management-reqres.git
+   git clone https://github.com/suyashgupta2411/user-management-reqres.git
    ```
 
 2. Navigate to the project directory:
