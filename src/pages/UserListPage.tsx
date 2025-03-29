@@ -44,6 +44,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Loader2, Edit, Trash2, LogOut, User } from "lucide-react";
 
+// Custom styles to override shadcn components for transparency
+import "../styles/glassStyles.css";
+
 const UserListPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -116,24 +119,27 @@ const UserListPage: React.FC = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Header */}
-      <header className="bg-primary text-primary-foreground py-4 px-6 shadow-md">
+      {/* Header - Solid background instead of transparent */}
+      <header className=" text-white py-4 px-6 ">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold">User Management</h1>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="rounded-full h-10 w-10 p-0">
+              <Button
+                variant="ghost"
+                className="rounded-full h-10 w-10 p-0 hover:bg-white/10"
+              >
                 <Avatar>
-                  <AvatarFallback>
+                  <AvatarFallback className="bg-white/10 text-white">
                     <User className="h-5 w-5" />
                   </AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuContent align="end" className="w-56 glass-dropdown">
               <DropdownMenuLabel>{username}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout} className="text-red-600">
+              <DropdownMenuItem onClick={handleLogout} className="text-red-300">
                 <LogOut className="mr-2 h-4 w-4" />
                 Logout
               </DropdownMenuItem>
@@ -144,47 +150,58 @@ const UserListPage: React.FC = () => {
 
       {/* Main Content */}
       <main className="flex-1 container mx-auto px-4 py-6 max-w-7xl">
-        <Card className="shadow-lg">
+        <Card className="glass-card border border-white/10 shadow-xl">
           <CardContent className="p-6">
             {loading ? (
               <div className="flex justify-center items-center h-64">
-                <Loader2 className="animate-spin w-12 h-12" />
+                <Loader2 className="animate-spin w-12 h-12 text-white" />
               </div>
             ) : (
               <>
                 <div className="overflow-x-auto -mx-4 sm:mx-0">
-                  <Table>
+                  <Table className="glass-table">
                     <TableHeader>
-                      <TableRow>
-                        <TableHead className="w-20">Avatar</TableHead>
-                        <TableHead>First Name</TableHead>
-                        <TableHead>Last Name</TableHead>
-                        <TableHead className="hidden md:table-cell">
+                      <TableRow className="border-b border-white/10">
+                        <TableHead className="w-20 text-white/80">
+                          Avatar
+                        </TableHead>
+                        <TableHead className="text-white/80">
+                          First Name
+                        </TableHead>
+                        <TableHead className="text-white/80">
+                          Last Name
+                        </TableHead>
+                        <TableHead className="hidden md:table-cell text-white/80">
                           Email
                         </TableHead>
-                        <TableHead>Actions</TableHead>
+                        <TableHead className="text-white/80">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {users.map((user) => (
-                        <TableRow key={user.id}>
+                        <TableRow
+                          key={user.id}
+                          className="border-b border-white/5 hover:bg-white/5"
+                        >
                           <TableCell>
                             <Avatar>
                               <AvatarImage
                                 src={user.avatar}
                                 alt={user.first_name}
                               />
-                              <AvatarFallback>
+                              <AvatarFallback className="bg-white/10 text-white">
                                 {user.first_name[0]}
                                 {user.last_name[0]}
                               </AvatarFallback>
                             </Avatar>
                           </TableCell>
-                          <TableCell className="font-medium">
+                          <TableCell className="font-medium text-white">
                             {user.first_name}
                           </TableCell>
-                          <TableCell>{user.last_name}</TableCell>
-                          <TableCell className="hidden md:table-cell truncate max-w-[150px] lg:max-w-none">
+                          <TableCell className="text-white">
+                            {user.last_name}
+                          </TableCell>
+                          <TableCell className="hidden md:table-cell truncate max-w-[150px] lg:max-w-none text-white/80">
                             {user.email}
                           </TableCell>
                           <TableCell>
@@ -193,7 +210,7 @@ const UserListPage: React.FC = () => {
                                 size="sm"
                                 variant="outline"
                                 onClick={() => handleEditUser(user)}
-                                className="w-full sm:w-auto"
+                                className="w-full sm:w-auto bg-white/10 border-white/20 text-white hover:bg-white/20"
                               >
                                 <Edit className="w-4 h-4 mr-2" /> Edit
                               </Button>
@@ -203,26 +220,27 @@ const UserListPage: React.FC = () => {
                                     size="sm"
                                     variant="destructive"
                                     onClick={() => setSelectedUser(user.id)}
-                                    className="w-full sm:w-auto"
+                                    className="w-full sm:w-auto bg-red-500/30 hover:bg-red-500/50 text-white"
                                   >
                                     <Trash2 className="w-4 h-4 mr-2" /> Delete
                                   </Button>
                                 </AlertDialogTrigger>
-                                <AlertDialogContent>
+                                <AlertDialogContent className="glass-dialog border border-white/10">
                                   <AlertDialogHeader>
-                                    <AlertDialogTitle>
+                                    <AlertDialogTitle className="text-white">
                                       Are you absolutely sure?
                                     </AlertDialogTitle>
-                                    <AlertDialogDescription>
+                                    <AlertDialogDescription className="text-white/70">
                                       This will permanently delete the user from
                                       the system.
                                     </AlertDialogDescription>
                                   </AlertDialogHeader>
                                   <AlertDialogFooter>
-                                    <AlertDialogCancel>
+                                    <AlertDialogCancel className="bg-white/10 text-white hover:bg-white/20">
                                       Cancel
                                     </AlertDialogCancel>
                                     <AlertDialogAction
+                                      className="bg-red-500/30 hover:bg-red-500/50 text-white"
                                       onClick={() =>
                                         selectedUser &&
                                         handleDeleteUser(selectedUser)
@@ -242,7 +260,7 @@ const UserListPage: React.FC = () => {
                 </div>
 
                 <Pagination className="mt-6">
-                  <PaginationContent>
+                  <PaginationContent className="text-white">
                     <PaginationItem>
                       <PaginationPrevious
                         href="#"
@@ -252,6 +270,7 @@ const UserListPage: React.FC = () => {
                             handlePageChange(current_page - 1);
                         }}
                         isActive={current_page > 1}
+                        className="bg-white/10 hover:bg-white/20 border-white/10"
                       />
                     </PaginationItem>
                     {[...Array(total_pages)].map((_, index) => (
@@ -266,13 +285,16 @@ const UserListPage: React.FC = () => {
                             e.preventDefault();
                             handlePageChange(index + 1);
                           }}
+                          className={`bg-white/10 hover:bg-white/20 border-white/10 ${
+                            current_page === index + 1 ? "bg-white/20" : ""
+                          }`}
                         >
                           {index + 1}
                         </PaginationLink>
                       </PaginationItem>
                     ))}
                     <PaginationItem className="inline-block sm:hidden">
-                      <span className="px-4 py-2">
+                      <span className="px-4 py-2 text-white/80">
                         {current_page} of {total_pages}
                       </span>
                     </PaginationItem>
@@ -285,6 +307,7 @@ const UserListPage: React.FC = () => {
                             handlePageChange(current_page + 1);
                         }}
                         isActive={current_page < total_pages}
+                        className="bg-white/10 hover:bg-white/20 border-white/10"
                       />
                     </PaginationItem>
                   </PaginationContent>
@@ -297,10 +320,10 @@ const UserListPage: React.FC = () => {
 
       {notification && (
         <div
-          className={`fixed bottom-4 right-4 left-4 sm:left-auto sm:w-80 p-4 rounded-md shadow-lg ${
+          className={`fixed bottom-4 right-4 left-4 sm:left-auto sm:w-80 p-4 rounded-md shadow-lg backdrop-blur-md ${
             notification.type === "success"
-              ? "bg-green-50 border-l-4 border-green-500 text-green-700"
-              : "bg-red-50 border-l-4 border-red-500 text-red-700"
+              ? "bg-green-500/30 border-l-4 border-green-500 text-green-100"
+              : "bg-red-500/30 border-l-4 border-red-500 text-red-100"
           } animate-in slide-in-from-bottom-5 duration-300`}
         >
           {notification.message}

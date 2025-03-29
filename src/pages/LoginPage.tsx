@@ -8,6 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
+// Import custom glass styles
+import "../styles/glassStyles.css";
+
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("eve.holt@reqres.in");
   const [password, setPassword] = useState("cityslicka");
@@ -34,23 +37,26 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-2xl font-geist-mono text-center">
+    <div className="flex min-h-screen items-center justify-center p-4">
+      <Card className="w-full max-w-md glass-card border border-white/20 shadow-2xl">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-2xl font-geist-mono text-center text-white">
             User Management Login
           </CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
             {error && (
-              <Alert variant="destructive">
+              <Alert
+                variant="destructive"
+                className="bg-red-500/30 border border-red-500/50 text-white"
+              >
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
 
             <div>
-              <label htmlFor="email" className="block mb-2">
+              <label htmlFor="email" className="block mb-2 text-white/80">
                 Email
               </label>
               <Input
@@ -60,11 +66,12 @@ const LoginPage: React.FC = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
                 required
+                className="glass-input text-white"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block mb-2">
+              <label htmlFor="password" className="block mb-2 text-white/80">
                 Password
               </label>
               <Input
@@ -74,12 +81,13 @@ const LoginPage: React.FC = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
                 required
+                className="glass-input text-white"
               />
             </div>
 
             <Button
               type="submit"
-              className="w-full"
+              className="w-full glass-button-primary mt-6"
               disabled={!email || !password}
             >
               Login

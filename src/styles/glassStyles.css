@@ -1,0 +1,84 @@
+/* Glass card */
+.glass-card {
+  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Glass table */
+.glass-table {
+  background-color: transparent;
+}
+
+/* Glass dropdown */
+.glass-dropdown {
+  background-color: rgba(15, 15, 15, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Glass dialog */
+.glass-dialog {
+  background-color: rgba(15, 15, 15, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Glass inputs */
+.glass-input {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.glass-input:focus {
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+/* Glass button variations */
+.glass-button {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.glass-button-primary {
+  background-color: rgba(59, 130, 246, 0.4);
+  color: white;
+}
+
+.glass-button-primary:hover {
+  background-color: rgba(59, 130, 246, 0.6);
+}
+
+.glass-button-red {
+  background-color: rgba(239, 68, 68, 0.4);
+  color: white;
+}
+
+.glass-button-red:hover {
+  background-color: rgba(239, 68, 68, 0.6);
+}
+
+/* Pagination styles with solid backgrounds */
+[role="navigation"] [data-state="active"] {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+[role="navigation"] button,
+[role="navigation"] a {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+[role="navigation"] button:hover,
+[role="navigation"] a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
