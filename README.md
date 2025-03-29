@@ -1,54 +1,143 @@
-# React + TypeScript + Vite
+# User Management System with Reqres API
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Live Demo:** [https://user-management-reqres-suyash.vercel.app/](https://user-management-reqres-suyash.vercel.app/)
 
-Currently, two official plugins are available:
+## 📋 Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This project is a user management application that integrates with the Reqres API. It demonstrates core features of a modern React application, including authentication, data fetching, state management, and CRUD operations.
 
-## Expanding the ESLint configuration
+The application offers a sleek, glass-morphic UI design with full responsiveness across all device sizes.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## ✨ Features
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- **Authentication** - Secure login system with token-based authentication
+- **User Management** - View, edit, and delete users
+- **Pagination** - Navigate through pages of user data
+- **Responsive Design** - Glass-morphic UI that works on all devices
+- **State Management** - Centralized state using Redux
+- **Toast Notifications** - User-friendly notifications for actions
+- **Form Validation** - Input validation for all forms
+- **Protected Routes** - Route protection based on authentication status
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🛠️ Technologies Used
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **React** - UI library
+- **TypeScript** - Type safety
+- **Redux Toolkit** - State management
+- **React Router** - Navigation
+- **Axios** - API requests
+- **Shadcn/UI** - Component library
+- **Tailwind CSS** - Styling
+- **Vite** - Build tool
+- **Lucide React** - Icon library
+- **Sonner** - Toast notifications
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (v14.0.0 or later)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/yourusername/user-management-reqres.git
+   ```
+
+2. Navigate to the project directory:
+
+   ```bash
+   cd user-management-reqres
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   npm install
+   # or
+   yarn
+   ```
+
+4. Start the development server:
+
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+5. The application should now be running on `http://localhost:5173`
+
+## 🔐 Authentication
+
+The application uses token-based authentication with the Reqres API. Default credentials are:
+
+- **Email:** eve.holt@reqres.in
+- **Password:** cityslicka
+
+The authentication token is stored in local storage for persistence between sessions.
+
+## 📱 Pages
+
+### Login Page
+
+- User authentication with form validation
+- Displays error messages for failed login attempts
+
+### User List Page
+
+- Displays a table of users with their details
+- Pagination controls for navigating through user pages
+- Edit and delete functionality for each user
+- User profile dropdown for logout
+
+### Edit User Page
+
+- Form for updating user details
+- Validation for required fields
+- Success/error notifications
+
+## 🔄 State Management
+
+Redux Toolkit is used for state management with the following slices:
+
+- **Auth Slice** - Manages authentication state, login, and logout
+- **User Slice** - Handles user data, CRUD operations, and pagination state
+
+## 🎨 Styling
+
+The application features a modern glass-morphic UI with:
+
+- Translucent card components
+- Dynamic color effects
+- Responsive design for all screen sizes
+- Customized Shadcn UI components
+
+## 📝 API Integration
+
+The application integrates with the Reqres API for:
+
+- User authentication (`POST /api/login`)
+- Fetching users (`GET /api/users?page={page}`)
+- Updating users (`PUT /api/users/{id}`)
+- Deleting users (`DELETE /api/users/{id}`)
+
+## 🧪 Future Improvements
+
+- Add search functionality
+- Implement sorting by different columns
+- Add user creation feature
+- Implement unit and integration tests
+- Add dark/light theme toggle
+- Enhance accessibility features
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 👨‍💻 Author
+
+- [Suyash Gupta](https://github.com/suyashgupta2411)
