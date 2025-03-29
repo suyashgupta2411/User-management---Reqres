@@ -42,7 +42,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Loader2, Edit, Trash2, LogOut, User } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Loader2, Edit, Trash2, LogOut, User, Search } from "lucide-react";
 
 // Custom styles to override shadcn components for transparency
 import "../styles/glassStyles.css";
@@ -59,6 +60,8 @@ const UserListPage: React.FC = () => {
     message: string;
     type: string;
   } | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [filteredUsers, setFilteredUsers] = useState(users);
 
   // User info - in a real app, you'd probably fetch this from an API
   // For now we'll just hardcode a username based on having a token
@@ -71,6 +74,22 @@ const UserListPage: React.FC = () => {
     }
   }, [dispatch, current_page, users.length]);
 
+  // Filter users whenever search query or users list changes
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setFilteredUsers(users);
+    } else {
+      const lowercasedQuery = searchQuery.toLowerCase();
+      const filtered = users.filter(
+        (user) =>
+          user.first_name.toLowerCase().includes(lowercasedQuery) ||
+          user.last_name.toLowerCase().includes(lowercasedQuery) ||
+          user.email.toLowerCase().includes(lowercasedQuery)
+      );
+      setFilteredUsers(filtered);
+    }
+  }, [searchQuery, users]);
+
   // Clear notification after 3 seconds
   useEffect(() => {
     if (notification) {
@@ -82,6 +101,7 @@ const UserListPage: React.FC = () => {
   }, [notification]);
 
   const handlePageChange = (page: number) => {
+    setSearchQuery(""); // Reset search when changing pages
     dispatch(fetchUsers(page));
   };
 
@@ -117,10 +137,14 @@ const UserListPage: React.FC = () => {
     navigate(`/users/edit/${user.id}`, { state: { user } });
   };
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header - Solid background instead of transparent */}
-      <header className=" text-white py-4 px-6 ">
+      <header className="text-white py-4 px-6">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold">User Management</h1>
           <DropdownMenu>
@@ -152,6 +176,20 @@ const UserListPage: React.FC = () => {
       <main className="flex-1 container mx-auto px-4 py-6 max-w-7xl">
         <Card className="glass-card border border-white/10 shadow-xl">
           <CardContent className="p-6">
+            {/* Search Bar */}
+            <div className="mb-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/50" />
+                <Input
+                  type="text"
+                  placeholder="Search users..."
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-white/50 w-full md:w-80"
+                />
+              </div>
+            </div>
+
             {loading ? (
               <div className="flex justify-center items-center h-64">
                 <Loader2 className="animate-spin w-12 h-12 text-white" />
@@ -178,140 +216,153 @@ const UserListPage: React.FC = () => {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {users.map((user) => (
-                        <TableRow
-                          key={user.id}
-                          className="border-b border-white/5 hover:bg-white/5"
-                        >
-                          <TableCell>
-                            <Avatar>
-                              <AvatarImage
-                                src={user.avatar}
-                                alt={user.first_name}
-                              />
-                              <AvatarFallback className="bg-white/10 text-white">
-                                {user.first_name[0]}
-                                {user.last_name[0]}
-                              </AvatarFallback>
-                            </Avatar>
-                          </TableCell>
-                          <TableCell className="font-medium text-white">
-                            {user.first_name}
-                          </TableCell>
-                          <TableCell className="text-white">
-                            {user.last_name}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell truncate max-w-[150px] lg:max-w-none text-white/80">
-                            {user.email}
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex flex-col sm:flex-row gap-2">
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => handleEditUser(user)}
-                                className="w-full sm:w-auto bg-white/10 border-white/20 text-white hover:bg-white/20"
-                              >
-                                <Edit className="w-4 h-4 mr-2" /> Edit
-                              </Button>
-                              <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                  <Button
-                                    size="sm"
-                                    variant="destructive"
-                                    onClick={() => setSelectedUser(user.id)}
-                                    className="w-full sm:w-auto bg-red-500/30 hover:bg-red-500/50 text-white"
-                                  >
-                                    <Trash2 className="w-4 h-4 mr-2" /> Delete
-                                  </Button>
-                                </AlertDialogTrigger>
-                                <AlertDialogContent className="glass-dialog border border-white/10">
-                                  <AlertDialogHeader>
-                                    <AlertDialogTitle className="text-white">
-                                      Are you absolutely sure?
-                                    </AlertDialogTitle>
-                                    <AlertDialogDescription className="text-white/70">
-                                      This will permanently delete the user from
-                                      the system.
-                                    </AlertDialogDescription>
-                                  </AlertDialogHeader>
-                                  <AlertDialogFooter>
-                                    <AlertDialogCancel className="bg-white/10 text-white hover:bg-white/20">
-                                      Cancel
-                                    </AlertDialogCancel>
-                                    <AlertDialogAction
-                                      className="bg-red-500/30 hover:bg-red-500/50 text-white"
-                                      onClick={() =>
-                                        selectedUser &&
-                                        handleDeleteUser(selectedUser)
-                                      }
+                      {filteredUsers.length > 0 ? (
+                        filteredUsers.map((user) => (
+                          <TableRow
+                            key={user.id}
+                            className="border-b border-white/5 hover:bg-white/5"
+                          >
+                            <TableCell>
+                              <Avatar>
+                                <AvatarImage
+                                  src={user.avatar}
+                                  alt={user.first_name}
+                                />
+                                <AvatarFallback className="bg-white/10 text-white">
+                                  {user.first_name[0]}
+                                  {user.last_name[0]}
+                                </AvatarFallback>
+                              </Avatar>
+                            </TableCell>
+                            <TableCell className="font-medium text-white">
+                              {user.first_name}
+                            </TableCell>
+                            <TableCell className="text-white">
+                              {user.last_name}
+                            </TableCell>
+                            <TableCell className="hidden md:table-cell truncate max-w-[150px] lg:max-w-none text-white/80">
+                              {user.email}
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex flex-col sm:flex-row gap-2">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => handleEditUser(user)}
+                                  className="w-full sm:w-auto bg-white/10 border-white/20 text-white hover:bg-white/20"
+                                >
+                                  <Edit className="w-4 h-4 mr-2" /> Edit
+                                </Button>
+                                <AlertDialog>
+                                  <AlertDialogTrigger asChild>
+                                    <Button
+                                      size="sm"
+                                      variant="destructive"
+                                      onClick={() => setSelectedUser(user.id)}
+                                      className="w-full sm:w-auto bg-red-500/30 hover:bg-red-500/50 text-white"
                                     >
-                                      Continue
-                                    </AlertDialogAction>
-                                  </AlertDialogFooter>
-                                </AlertDialogContent>
-                              </AlertDialog>
-                            </div>
+                                      <Trash2 className="w-4 h-4 mr-2" /> Delete
+                                    </Button>
+                                  </AlertDialogTrigger>
+                                  <AlertDialogContent className="glass-dialog border border-white/10">
+                                    <AlertDialogHeader>
+                                      <AlertDialogTitle className="text-white">
+                                        Are you absolutely sure?
+                                      </AlertDialogTitle>
+                                      <AlertDialogDescription className="text-white/70">
+                                        This will permanently delete the user
+                                        from the system.
+                                      </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                      <AlertDialogCancel className="bg-white/10 text-white hover:bg-white/20">
+                                        Cancel
+                                      </AlertDialogCancel>
+                                      <AlertDialogAction
+                                        className="bg-red-500/30 hover:bg-red-500/50 text-white"
+                                        onClick={() =>
+                                          selectedUser &&
+                                          handleDeleteUser(selectedUser)
+                                        }
+                                      >
+                                        Continue
+                                      </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                  </AlertDialogContent>
+                                </AlertDialog>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow>
+                          <TableCell
+                            colSpan={5}
+                            className="h-24 text-center text-white/70"
+                          >
+                            No users found matching "{searchQuery}"
                           </TableCell>
                         </TableRow>
-                      ))}
+                      )}
                     </TableBody>
                   </Table>
                 </div>
 
-                <Pagination className="mt-6">
-                  <PaginationContent className="text-white">
-                    <PaginationItem>
-                      <PaginationPrevious
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          if (current_page > 1)
-                            handlePageChange(current_page - 1);
-                        }}
-                        isActive={current_page > 1}
-                        className="bg-white/10 hover:bg-white/20 border-white/10"
-                      />
-                    </PaginationItem>
-                    {[...Array(total_pages)].map((_, index) => (
-                      <PaginationItem
-                        key={index}
-                        className="hidden sm:inline-block"
-                      >
-                        <PaginationLink
+                {!searchQuery && (
+                  <Pagination className="mt-6">
+                    <PaginationContent className="text-white">
+                      <PaginationItem>
+                        <PaginationPrevious
                           href="#"
-                          isActive={current_page === index + 1}
                           onClick={(e) => {
                             e.preventDefault();
-                            handlePageChange(index + 1);
+                            if (current_page > 1)
+                              handlePageChange(current_page - 1);
                           }}
-                          className={`bg-white/10 hover:bg-white/20 border-white/10 ${
-                            current_page === index + 1 ? "bg-white/20" : ""
-                          }`}
-                        >
-                          {index + 1}
-                        </PaginationLink>
+                          isActive={current_page > 1}
+                          className="bg-white/10 hover:bg-white/20 border-white/10"
+                        />
                       </PaginationItem>
-                    ))}
-                    <PaginationItem className="inline-block sm:hidden">
-                      <span className="px-4 py-2 text-white/80">
-                        {current_page} of {total_pages}
-                      </span>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationNext
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          if (current_page < total_pages)
-                            handlePageChange(current_page + 1);
-                        }}
-                        isActive={current_page < total_pages}
-                        className="bg-white/10 hover:bg-white/20 border-white/10"
-                      />
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
+                      {[...Array(total_pages)].map((_, index) => (
+                        <PaginationItem
+                          key={index}
+                          className="hidden sm:inline-block"
+                        >
+                          <PaginationLink
+                            href="#"
+                            isActive={current_page === index + 1}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handlePageChange(index + 1);
+                            }}
+                            className={`bg-white/10 hover:bg-white/20 border-white/10 ${
+                              current_page === index + 1 ? "bg-white/20" : ""
+                            }`}
+                          >
+                            {index + 1}
+                          </PaginationLink>
+                        </PaginationItem>
+                      ))}
+                      <PaginationItem className="inline-block sm:hidden">
+                        <span className="px-4 py-2 text-white/80">
+                          {current_page} of {total_pages}
+                        </span>
+                      </PaginationItem>
+                      <PaginationItem>
+                        <PaginationNext
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (current_page < total_pages)
+                              handlePageChange(current_page + 1);
+                          }}
+                          isActive={current_page < total_pages}
+                          className="bg-white/10 hover:bg-white/20 border-white/10"
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                )}
               </>
             )}
           </CardContent>
