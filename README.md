@@ -12,6 +12,7 @@ The application offers a sleek, glass-morphic UI design with full responsiveness
 
 - **Authentication** - Secure login system with token-based authentication
 - **User Management** - View, edit, and delete users
+- **Search Functionality** - Real-time client-side filtering of users
 - **Pagination** - Navigate through pages of user data
 - **Responsive Design** - Glass-morphic UI that works on all devices
 - **State Management** - Centralized state using Redux
@@ -90,6 +91,7 @@ The authentication token is stored in local storage for persistence between sess
 ### User List Page
 
 - Displays a table of users with their details
+- Search functionality to filter users by name or email
 - Pagination controls for navigating through user pages
 - Edit and delete functionality for each user
 - User profile dropdown for logout
@@ -125,14 +127,24 @@ The application integrates with the Reqres API for:
 - Updating users (`PUT /api/users/{id}`)
 - Deleting users (`DELETE /api/users/{id}`)
 
+## 🔍 Search Functionality
+
+The application includes a client-side search feature that:
+
+- Filters users in real-time as you type
+- Searches across first name, last name, and email fields
+- Preserves the existing UI aesthetic with a glass-morphic search input
+- Shows a helpful message when no matching users are found
+- Automatically resets when changing pages
+
 ## 🧪 Future Improvements
 
-- Add search functionality
 - Implement sorting by different columns
 - Add user creation feature
 - Implement unit and integration tests
 - Add dark/light theme toggle
 - Enhance accessibility features
+- Extend search with advanced filtering options
 
 ## 📄 License
 
